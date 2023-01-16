@@ -485,7 +485,7 @@ void ccHistogramWindow::refresh()
 		for (int i = 0; i < histoSize; ++i)
 		{
 			//we take the 'normalized' value at the middle of the class
-			double normVal = (static_cast<double>(i)+0.5) / histoSize;
+			double normVal = (i + 0.5) / histoSize;
 
 			totalSum += m_histoValues[i];
 			if (normVal < m_verticalIndicatorPositionPercent)
@@ -510,7 +510,14 @@ void ccHistogramWindow::refresh()
 				{
 					//use default gradient
 					assert(colorScale);
-					col = colorScale->getColorByRelativePos(normVal);
+					if (colorScale->isRelative())
+					{
+						col = colorScale->getColorByRelativePos(normVal);
+					}
+					else
+					{
+						col = colorScale->getColorByValue(keyData[i]);
+					}
 				}
 				if (!col) //hidden values may have no associated color!
 				{
